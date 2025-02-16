@@ -16,7 +16,7 @@ const IsAltDown: FC = () => {
     //const altDown = GameUI.IsAltDown();
     const [altDown, setAltDown] = useState(false)
 	const hotKey = "R";
-	const cmd = 'FiveCloud_CustomKey_' + hotKey + '_';
+	const cmd = 'CustomKey_' + hotKey + '_' + Date.now().toString(32);
 	$.Msg("==>Ronkeydown==>" + cmd)
 	Game.CreateCustomKeyBind(hotKey, cmd);
 	Game.AddCommand(cmd, (keys)=>{
