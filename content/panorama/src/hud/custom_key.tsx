@@ -3,45 +3,62 @@ import 'panorama-polyfill-x/lib/timers';
 
 import { useMemo, useState, useEffect, type FC } from 'react';
 import { render } from 'react-panorama-x';
-import { useXNetTableKey } from '../hooks/useXNetTable';
 
 // 自定义按键监控组件
 export const CustomKey: FC = () => {
-  RegisterKeyBind(KeyCode.key_W, ()=>{
-    
-    // todo 发送监听事件
-  });
+	// 状态管理每个按键的按下状态
+	const [wState, setWState] = useState(false);
+	const [aState, setAState] = useState(false);
+	const [sState, setSState] = useState(false);
+	const [dState, setDState] = useState(false);
 
-  RegisterKeyBind(KeyCode.key_A, ()=>{
+	useEffect(() => {
+		// 假设 RegisterKeyBind 是已实现的按键注册函数
+		RegisterKeyBind(KeyCode.key_W, ()=>{
+			// todo 发送监听事件
+			// GameEvents.SendCustomGameEventToServer<{ key: string }>("custom_key", { key: KeyCode.key_W });
+			setWState(true);
+		});
+	
+		RegisterKeyBind(KeyCode.key_A, ()=>{
+			setWState(true);
+		});
+	
+		RegisterKeyBind(KeyCode.key_S, ()=>{
+			setWState(true);
+		});
+	
+		RegisterKeyBind(KeyCode.key_D, ()=>{
+			setWState(true);
+		});
+	
+		// 返回清理函数 暂时没有吧
+		return () => {
+		//   unregisterW();
+		//   unregisterA();
+		//   unregisterS();
+		//   unregisterD();
+		};
+	}, []);
 
-  });
-
-  RegisterKeyBind(KeyCode.key_S, ()=>{
-
-  });
-
-  RegisterKeyBind(KeyCode.key_D, ()=>{
-
-  });
-
-  return (
-    <Panel>
-      <Label text={`W: `} />
-      <Label text={`A: `} />
-      <Label text={`S: `} />
-      <Label text={`D: `} />
-    </Panel>
-  );
+	return (
+		<Panel>
+			<Label text={`W: ${wState}`} />
+			<Label text={`A: ${aState}`} />
+			<Label text={`S: ${sState}`} />
+			<Label text={`D: ${dState}`} />
+		</Panel>
+	);
 }
 
 export function RegisterKeyBind(key: string, callBack?: () => void) {
-  const cmd = 'CustomKey_' + key + '_' + Date.now().toString(32);
-  Game.CreateCustomKeyBind(key, cmd);
-  Game.AddCommand(cmd, ()=>{
+	const cmd = 'CustomKey_' + key + '_' + Date.now().toString(32);
+	Game.CreateCustomKeyBind(key, cmd);
+	Game.AddCommand(cmd, ()=>{
 		if (callBack) {
 			callBack();
 		}
-  }, '', 1 << 32)
+	}, '', 1 << 32)
 }
 
 export const KeyCode = {
