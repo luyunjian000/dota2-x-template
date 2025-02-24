@@ -16,20 +16,26 @@ export const CustomKey: FC = () => {
 		// 假设 RegisterKeyBind 是已实现的按键注册函数
 		RegisterKeyBind(KeyCode.key_W, ()=>{
 			// todo 发送监听事件
-			// GameEvents.SendCustomGameEventToServer<{ key: string }>("custom_key", { key: KeyCode.key_W });
+			GameEvents.SendCustomGameEventToServer<{ key: string }>("custom_key", { key: KeyCode.key_W });
 			setWState(true);
+			$.Msg('======>w+');  
+		},()=>{
+			$.Msg('======>w-');  
 		});
 	
 		RegisterKeyBind(KeyCode.key_A, ()=>{
-			setWState(true);
+			GameEvents.SendCustomGameEventToServer<{ key: string }>("custom_key", { key: KeyCode.key_A });
+			setAState(true);
 		});
 	
 		RegisterKeyBind(KeyCode.key_S, ()=>{
-			setWState(true);
+			GameEvents.SendCustomGameEventToServer<{ key: string }>("custom_key", { key: KeyCode.key_S });
+			setSState(true);
 		});
 	
 		RegisterKeyBind(KeyCode.key_D, ()=>{
-			setWState(true);
+			GameEvents.SendCustomGameEventToServer<{ key: string }>("custom_key", { key: KeyCode.key_D });
+			setDState(true);
 		});
 	
 		// 返回清理函数 暂时没有吧
@@ -51,12 +57,20 @@ export const CustomKey: FC = () => {
 	);
 }
 
-export function RegisterKeyBind(key: string, callBack?: () => void) {
+export function RegisterKeyBind(key: string, onkeydown?: () => void, onkeyup?: () => void) {
 	const cmd = 'CustomKey_' + key + '_' + Date.now().toString(32);
-	Game.CreateCustomKeyBind(key, cmd);
-	Game.AddCommand(cmd, ()=>{
-		if (callBack) {
-			callBack();
+	const pressCmd = '+' + cmd;
+	const releaseCmd = '-' + cmd;
+	Game.CreateCustomKeyBind(key, pressCmd);
+	Game.AddCommand(pressCmd, ()=>{
+		if (onkeydown) {
+			onkeydown();
+		}
+	}, '', 1 << 32)
+
+	Game.AddCommand(releaseCmd, ()=>{
+		if (onkeyup) {
+			onkeyup();
 		}
 	}, '', 1 << 32)
 }

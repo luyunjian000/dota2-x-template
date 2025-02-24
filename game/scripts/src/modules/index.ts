@@ -1,3 +1,4 @@
+import { CustomController } from './CustomController';
 import { Debug } from './Debug';
 import { GameConfig } from './GameConfig';
 import { XNetTable } from './xnet-table';
@@ -21,5 +22,7 @@ export function ActivateModules() {
         new GameConfig();
         // 初始化测试模块xD
         new Debug();
+        // 个性化按键控制
+        new CustomController();
     }
 }

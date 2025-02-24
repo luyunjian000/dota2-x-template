@@ -1,9 +1,9 @@
 import { reloadable } from '../utils/tstl-utils';
 
 // 定义网格参数（假设地图总大小为 15000x15000，分 50x50 格子）
-const GRID_SIZE = 300; // 15000 / 50 = 300（每个格子边长 300 单位）
+const GRID_SIZE = 64; // 15000 / 50 = 300（每个格子边长 300 单位）
 const HALF_GRID = GRID_SIZE / 2; // 格子中心点偏移
-const MAX_GRID = 49; // 50x50 网格的范围是 0~49
+const MAX_GRID = 256; // 50x50 网格的范围是 0~49
 
 @reloadable
 export class CustomController {
@@ -20,6 +20,8 @@ export class CustomController {
 
   // 处理按键事件
   private handleKeyPress(event: { PlayerID: PlayerID; key: string }) {
+    print(`PlayerID=${event.PlayerID}`);
+
     const playerID = event.PlayerID;
     const hero = PlayerResource.GetSelectedHeroEntity(playerID);
 
